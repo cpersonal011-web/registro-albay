@@ -98,10 +98,28 @@
     }
 
     function submitData() {
-        // Aquí conectaremos con tu Google Sheets
-        alert("¡Datos validados! Ahora necesitamos el link de tu Google Sheets para enviar la información.");
+        // PEGA TU LINK DE GOOGLE AQUÍ ABAJO ENTRE LAS COMILLAS
+        const url = "https://script.google.com/macros/s/AKfycbxiNfw983VJecClQUpfAT0drUTxPaC-nnuDzK5aMtvB4wJSauzDzMNhwyMXZ4CYBqwi/exec"; 
+
+        const data = {
+            ubicacion: document.getElementById('ubicacion').value,
+            cloro: document.getElementById('cloro').value,
+            ph: document.getElementById('ph').value,
+            observaciones: document.getElementById('observaciones').value,
+            horasExtra: document.getElementById('horasExtra').value
+        };
+
+        fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert("✅ Registro guardado con éxito en el FO-CC-069");
+            document.getElementById('waterForm').reset();
+        }).catch(err => {
+            alert("Error al guardar: " + err);
+        });
     }
 </script>
-
 </body>
 </html>
