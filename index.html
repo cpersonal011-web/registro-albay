@@ -2,70 +2,106 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Control de Agua - Albay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FO-CC-069 Control y Seguridad del Agua</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { color: #004d40; text-align: center; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .alerta { color: red; font-size: 0.8em; display: none; margin-top: 5px; }
-        button { width: 100%; background: #004d40; color: white; border: none; padding: 10px; margin-top: 20px; border-radius: 4px; cursor: pointer; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e0e0e0; margin: 0; padding: 20px; }
+        .container { background-color: white; max-width: 800px; margin: auto; padding: 30px; border: 1px solid #000; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .header-table td { border: 1px solid #000; padding: 10px; text-align: center; font-weight: bold; font-size: 12px; }
+        .logo { width: 120px; }
+        h2 { text-align: center; color: #1a5d1a; margin-top: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        .alert { color: #d32f2f; background: #ffcdd2; padding: 10px; border-radius: 4px; display: none; margin-top: 5px; font-weight: bold; border-left: 5px solid #d32f2f; }
+        button { width: 100%; background-color: #1a5d1a; color: white; padding: 15px; border: none; border-radius: 4px; font-size: 18px; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        button:hover { background-color: #144014; }
+        .footer-note { font-size: 11px; text-align: center; margin-top: 20px; color: #666; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Control de Agua FO-CC-069</h2>
-        <form id="registroAgua">
-            <label>Ubicación:</label>
+
+<div class="container">
+    <table class="header-table">
+        <tr>
+            <td rowspan="2"><img src="https://albay.com.gt/wp-content/uploads/2021/05/Logo-Albay-01.png" class="logo" alt="Albay"></td>
+            <td>FORMATO<br>CONTROL Y SEGURIDAD DEL AGUA<br>CÓDIGO: FO-CC-069</td>
+            <td>CONTROL DE CALIDAD</td>
+        </tr>
+        <tr>
+            <td>VERSIÓN: 04 / FECHA: 09/01/2025</td>
+            <td>PÁGINA 1 DE 1</td>
+        </tr>
+    </table>
+
+    <form id="waterForm">
+        <div class="form-group">
+            <label>Ubicación Toma de Muestra:</label>
             <select id="ubicacion" required>
+                <option value="">Seleccione ubicación...</option>
                 <option value="Salida de cisterna">Salida de cisterna</option>
-                <option value="Lavamanos">Lavamanos</option>
-                <option value="Filtro Caldera">Filtro Caldera</option>
+                <option value="Entrada a tanque para remojo">Entrada a tanque para remojo</option>
+                <option value="Filtro de agua para caldera">Filtro de agua para caldera</option>
+                <option value="Lavamanos Servicios-Personal">Lavamanos Servicios-Personal</option>
             </select>
+        </div>
 
-            <label>Cloro Residual (0.5-1.0):</label>
-            <input type="number" step="0.1" id="cloro" required oninput="validar()">
-            <div id="alertCloro" class="alerta">⚠️ Valor fuera de rango. Debe dejar observación.</div>
+        <div class="form-group">
+            <label>Cloro Residual (Rango: 0.5 - 1.0 ppm):</label>
+            <input type="number" step="0.01" id="cloro" placeholder="0.00" required oninput="checkRanges()">
+            <div id="alertCloro" class="alert">⚠️ ¡ATENCIÓN! Cloro fuera de rango (0.5-1.0). Debe justificar en observaciones.</div>
+        </div>
 
-            <label>pH (6.5-8.5):</label>
-            <input type="number" step="0.1" id="ph" required oninput="validar()">
-            <div id="alertPH" class="alerta">⚠️ Valor fuera de rango. Debe dejar observación.</div>
+        <div class="form-group">
+            <label>pH (Rango: 6.5 - 8.5):</label>
+            <input type="number" step="0.1" id="ph" placeholder="0.0" required oninput="checkRanges()">
+            <div id="alertPH" class="alert">⚠️ ¡ATENCIÓN! pH fuera de rango (6.5-8.5). Debe justificar en observaciones.</div>
+        </div>
 
-            <label>Observaciones:</label>
-            <textarea id="observaciones"></textarea>
+        <div class="form-group">
+            <label>Observaciones / Correcciones:</label>
+            <textarea id="observaciones" rows="3" placeholder="Escriba aquí si hubo desviaciones..."></textarea>
+        </div>
 
+        <div class="form-group">
             <label>Horas Extra Trabajadas:</label>
-            <input type="number" id="horasExtra" value="0">
+            <input type="number" step="0.5" id="horasExtra" value="0" required>
+            <small>Indique el tiempo adicional dedicado a esta inspección.</small>
+        </div>
 
-            <button type="button" onclick="enviar()">Registrar Movimiento</button>
-        </form>
-    </div>
+        <button type="button" onclick="submitData()">GUARDAR REGISTRO</button>
+    </form>
 
-    <script>
-        function validar() {
-            const ph = document.getElementById('ph').value;
-            const cloro = document.getElementById('cloro').value;
-            const obs = document.getElementById('observaciones');
-            
-            // Mostrar alertas visuales
-            document.getElementById('alertPH').style.display = (ph < 6.5 || ph > 8.5) ? 'block' : 'none';
-            document.getElementById('alertCloro').style.display = (cloro < 0.5 || cloro > 1.0) ? 'block' : 'none';
-            
-            // Si hay error, la observación es obligatoria
-            if ((ph < 6.5 || ph > 8.5) || (cloro < 0.5 || cloro > 1.0)) {
-                obs.placeholder = "OBLIGATORIO: Explique el desvío...";
-                obs.style.borderColor = "red";
-            } else {
-                obs.placeholder = "";
-                obs.style.borderColor = "#ccc";
-            }
+    <div class="footer-note">Sistema de Registro Digital Albay - FO-CC-069</div>
+</div>
+
+<script>
+    function checkRanges() {
+        const cloro = document.getElementById('cloro').value;
+        const ph = document.getElementById('ph').value;
+        const obs = document.getElementById('observaciones');
+        
+        const cloroError = (cloro !== "" && (cloro < 0.5 || cloro > 1.0));
+        const phError = (ph !== "" && (ph < 6.5 || ph > 8.5));
+
+        document.getElementById('alertCloro').style.display = cloroError ? 'block' : 'none';
+        document.getElementById('alertPH').style.display = phError ? 'block' : 'none';
+
+        if (cloroError || phError) {
+            obs.style.border = "2px solid #d32f2f";
+            obs.required = true;
+        } else {
+            obs.style.border = "1px solid #ccc";
+            obs.required = false;
         }
+    }
 
-        function enviar() {
-            alert("¡Registro enviado! (Aquí conectaríamos con tu Google Sheets)");
-            // Aquí se añade el código de envío que te mencioné antes
-        }
-    </script>
+    function submitData() {
+        // Aquí conectaremos con tu Google Sheets
+        alert("¡Datos validados! Ahora necesitamos el link de tu Google Sheets para enviar la información.");
+    }
+</script>
+
 </body>
 </html>
